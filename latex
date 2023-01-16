@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Variables needed to compile latex
+file=$(basename $(find . -type f -name "*.tex") .tex)
+tex="$file.tex"
+bib="$file.aux"
+pdf="$file.pdf"
+
+compile_latex() {
+  echo "Compiling latex"
+  pdflatex $tex >/dev/null 
+  echo "Compiling bibliography"
+  bibtex $bib >/dev/null 
+  if [[ $? != 0 ]]
+  then
+    echo "Could not compile papers."
+    exit 1
+  fi
+  echo "Recompiling latex"
+  pdflatex $tex >/dev/null
+  pdflatex $tex >/dev/null
+  echo "Compilation complete, opening pdf"
+  zathura $pdf &
+}
+
+if [[ ! $file == "" ]]
+then
+  compile_latex
+else
+  echo "Tex file not found. Are you in the correct directory?"
+  exit 1
+fi
+
