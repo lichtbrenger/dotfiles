@@ -1,12 +1,18 @@
 window:
   decorations: None
   opacity: 0.8
+  padding:
+    x: 7 
+    y: 7
+
 shell:
   program: /bin/zsh
   args:
     - --login
+    - -c
+    - "tmux attach || tmux"
 import:
-  - ./dracula.yml
+  - ./catppuccin.yml
 font:
   normal:
     family: Monospace

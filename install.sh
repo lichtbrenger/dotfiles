@@ -87,8 +87,8 @@ install_firefox() {
 install_latex() {
   echo "--------------------- Installing latex -----------------------------"
   sudo dnf install texlive-scheme-full
-  sudo ln -sf `pwd`/latex /usr/local/bin/latex
-  sudo ln -sf `pwd`/create_tex /usr/local/bin/create_tex
+  sudo ln -sf `pwd`/latex/compile_latex /usr/local/bin/compile_latex
+  sudo ln -sf `pwd`/latex/create_tex /usr/local/bin/create_tex
 
   LATEX_STRING="Install latex [done]"
 }
