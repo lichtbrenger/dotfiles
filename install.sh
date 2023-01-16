@@ -8,6 +8,8 @@ NVIM_STRING="Install Neovim"
 ZSH_STRING="Install zsh"
 ALACRITTY_STRING="Install alacritty"
 FIREFOX_STRING="Install firefox"
+LATEX_STRING="Install latex"
+
 
 # Check if public key exists.
 FILE=~/.ssh/id_ed25519.pub
@@ -15,23 +17,11 @@ FILE=~/.ssh/id_ed25519.pub
 # Check if basic utilities are installed.
 BASIC_UTILITIES=false
 
-IS_UBUNTU=true
-if [[ $(uname -a | grep Ubuntu ) ]]
-then
-  IS_UBUNTU=true
-else
-  IS_UBUNTU=false
-fi
-
 # 1)
 install_basic_utilities() {
-  if [[ $IS_UBUNTU = true ]]; then
-  	sudo apt install -y git curl ripgrep cmake ninja-build gettext libtool libtool-bin autoconf automake g++ pkg-config unzip doxygen pip npm ripgrep
-  else
-   sudo dnf upgrade
-    echo '------------------ essential libraries ------------------------------'
-    sudo dnf install -y git curl ripgrep pip npm unzip g++
-  fi
+  sudo dnf upgrade
+  echo '------------------ essential libraries ------------------------------'
+  sudo dnf install -y git curl ripgrep pip npm unzip g++
 
   BASIC_UTILITIES=true
   BASIC_UTILITIES_STRING="Install basic utilities [done]"
@@ -58,18 +48,8 @@ generate_ssh_keys() {
 # 3)
 install_nvim() {
 	echo "---------------------- Installing nvim ---------------------------"
-  if [[ $IS_UBUNTU = false ]]
-  then
-    sudo dnf install -y neovim python3-neovim
-  	cp -r ./dotfiles/.config/nvim $HOME/.config
-  else
-	  sudo apt install -y git curl cmake ninja-build gettext libtool libtool-bin autoconf automake g++ pkg-config unzip doxygen pip npm ripgrep
-    cd $HOME
-	  git clone https://github.com/neovim/neovim.git
-	  cd neovim
-	  make
-	  sudo make install
-  fi
+  sudo dnf install -y neovim python3-neovim
+  cp -r ./dotfiles/.config/nvim $HOME/.config
   
   NVIM_STRING="Install Neovim [done]"
 }
@@ -77,14 +57,8 @@ install_nvim() {
 # 4)
 install_zsh() {
 	echo "------------------------- Installing Zshell ----------------------"
-  if [[ $IS_UBUNTU = false ]]
-  then
-    sudo dnf install -y zsh
-    sudo usermod -s /usr/bin/zsh $USER
-  else
-	  sudo apt install -y zsh
-    chsh -s $(which zsh)
-  fi
+  sudo dnf install -y zsh
+  sudo usermod -s /usr/bin/zsh $USER
   
 	sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
@@ -94,33 +68,10 @@ install_zsh() {
 # 5)
 install_alacritty() {
 	echo "---------------------- Installing Alacritty ----------------------" 
-  if [[ $IS_UBUNTU = true ]]
-  then
-    sudo apt install -y rustc cargo cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-  else
-    sudo dnf install -y alacritty
-    mkdir $HOME/.config/Alacritty
-    cp `pwd`/alacritty.yml $HOME/.config/alacritty/
-  fi
-}
-
-configure_ubuntu() {
-	echo "-------------------- Removing the dock --------------------------"
-	gsettings set org.gnome.shell.extensions.dash-to-dock autohide false
-	gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-	gsettings set org.gnome.shell.extensions.dash-to-dock intellihide false
-
-  # don't allow for automatic updates
-  gsettings set org.gnome.software allow-updates false
-	gsettings set org.gnome.software download-updates false
-	gsettings set org.gnome.software download-updates-notify false
-	
-	echo "-------------------- Removing trash icon --------------------------"
-	gsettings set org.gnome.shell.extensions.desktop-icons show-trash false
-
-  echo "--------------------- Configuring snap ---------------------------------"
-  sudo snap remove snap-list
-  sudo snap install slack
+  sudo dnf install -y alacritty
+  mkdir $HOME/.config/Alacritty
+  sudo ln -sf `pwd`/allacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+  sudo ln -sf `pwd`/alacritty/catppuccin.yml $HOME/.config/alacritty/catppuccin.yml
 }
 
 install_firefox() {
@@ -133,6 +84,15 @@ install_firefox() {
   FIREFOX_STRING="Install firefox [done]"
 }
 
+install_latex() {
+  echo "--------------------- Installing latex -----------------------------"
+  sudo dnf install texlive-scheme-full
+  sudo ln -sf `pwd`/latex /usr/local/bin/latex
+  sudo ln -sf `pwd`/create_tex /usr/local/bin/create_tex
+
+  LATEX_STRING="Install latex [done]"
+}
+
 install_menu() {
   echo -ne "
     1) $BASIC_UTILITIES_STRING
@@ -141,6 +101,7 @@ install_menu() {
     4) $ZSH_STRING
     5) $ALACRITTY_STRING
     6) $FIREFOX_STRING
+    7) $LATEX_STRING
     0) Exit
     Choose an option:  "
     read -r option
@@ -169,6 +130,10 @@ install_menu() {
        install_firefox
        install_menu
        ;;
+    7)
+        install_latex
+        install_menu
+        ;;
     0)
         exit 0
         ;;
@@ -180,4 +145,3 @@ install_menu() {
 }
 
 install_menu
-

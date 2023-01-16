@@ -4,7 +4,11 @@ if not status_ok then
 end
 
 configs.setup {
+<<<<<<< HEAD
   ensure_installed = { "lua", "python" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+=======
+  ensure_installed = { "lua", "python", "haskell" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+>>>>>>> main
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = { "" }, -- List of parsers to ignore installing
   autopairs = {

@@ -1,0 +1,53 @@
+#!/bin/bash
+
+FILE="main.tex"
+if [[ -f $FILE ]]
+then
+  echo "File ${FILE} already exists."
+  exit 1
+fi
+
+standard_latex() {
+  touch main.tex
+  echo "\documentclass [11pt]{ article}" >> main.tex
+  echo "\begin{document}" >> main.tex
+  echo "\bibliography{papers}" >> main.tex
+  echo "\bibliographystyle{ieeetr}" >> main.tex
+  echo "\end{document}" >> main.tex
+}
+
+research_latex() {
+  touch main.tex
+  echo "\documentclass [11pt]{ article}" >> main.tex
+  echo "\begin{document}" >> main.tex
+  echo "\title{Title Text}" >> main.tex
+  echo "\author{Name (and student number)\\ Affiliation \\ Email}" >> main.tex
+  echo "\maketitle" >> main.tex
+  echo "\section{Introduction}" >> main.tex
+  echo "\bibliography{papers}" >> main.tex
+  echo "\bibliographystyle{ieeetr}" >> main.tex
+  echo "\end{document}" >> main.tex
+}
+
+POSITIONAL_ARGS=()
+while [[ $# -gt 0 ]] do
+  case $1 in
+    -t|--type)
+      TYPE="$2"
+      shift
+      shift
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if [[ $TYPE == "s" ]]
+then
+    standard_latex
+else
+  research_latex
+fi
+

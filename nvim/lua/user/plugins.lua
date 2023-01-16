@@ -56,7 +56,12 @@ return packer.startup(function(use)
 
 
   -- Colorscheme
+<<<<<<< HEAD
   use "rebelot/kanagawa.nvim"
+=======
+  --  use "rebelot/kanagawa.nvim"
+  use "dracula/vim"
+>>>>>>> main
 
   -- Lsp
   use "neovim/nvim-lspconfig"
