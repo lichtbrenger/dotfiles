@@ -107,6 +107,7 @@ install_menu() {
     5) $ALACRITTY_STRING
     6) $FIREFOX_STRING
     7) $LATEX_STRING
+    8) $TMUX_STRING
     0) Exit
     Choose an option:  "
     read -r option
@@ -139,6 +140,10 @@ install_menu() {
         install_latex
         install_menu
         ;;
+    8)
+      install_tmux
+      install_menu
+      ;;
     0)
         exit 0
         ;;
