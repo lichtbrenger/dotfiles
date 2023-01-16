@@ -96,6 +96,8 @@ install_latex() {
 install_tmux() {
   sudo dnf -y install tmux
   sudo ln -sf `pwd`/.tmux.conf $HOME/
+
+  TMUX_STRING="Install tmux [done]"
 }
 
 install_menu() {
