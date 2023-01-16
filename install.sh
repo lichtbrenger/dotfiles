@@ -9,7 +9,7 @@ ZSH_STRING="Install zsh"
 ALACRITTY_STRING="Install alacritty"
 FIREFOX_STRING="Install firefox"
 LATEX_STRING="Install latex"
-
+TMUX_STRING="Install tmux"
 
 # Check if public key exists.
 FILE=~/.ssh/id_ed25519.pub
@@ -91,6 +91,11 @@ install_latex() {
   sudo ln -sf `pwd`/latex/create_tex /usr/local/bin/create_tex
 
   LATEX_STRING="Install latex [done]"
+}
+
+install_tmux() {
+  sudo dnf -y install tmux
+  sudo ln -sf `pwd`/.tmux.conf $HOME/
 }
 
 install_menu() {
