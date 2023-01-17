@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script installs all the utilities 
+# needed for a pleasant laptop environment.
+
 $OPTION
 # dynamic text for the install menu.
 BASIC_UTILITIES_STRING="Install basic utilities"
@@ -27,12 +30,16 @@ install_basic_utilities() {
 
 configure_wm() {
   sudo dnf install polybar
-  sudo ln -sf `pwd`/polybar/config.ini /etc/polybar/
-  sudo ln -sf `pwd`/polybar/launch.sh $HOME/.config/polybar/
+  sudo ln -sf `pwd`/desktop_environment/polybar/config.ini /etc/polybar/
+  sudo ln -sf `pwd`/desktop_environment/polybar/launch.sh $HOME/.config/polybar/
 
   sudo dnf install rofi
-  sudo ln -sf `pwd`/config.rasi $HOME/.config/rofi/config.rasi
+  sudo ln -sf `pwd`/desktop_environment/rofi/config.rasi $HOME/.config/rofi/config.rasi
 
+  sudo dnf install picom
+  sudo ln -sf `pwd`/desktop_environment/picom/picom.conf $home/.config/picom.conf
+
+  echo "Please restart your system after you finish installing."
   WM_STRING="Configure windows manager [done]"
 }
 
@@ -48,7 +55,7 @@ generate_ssh_keys() {
 		ssh-keygen -t ed25519 -C "$mail_address"
 		eval "$(ssh-agent -s)"
 		ssh-add ~/.ssh/id_ed25519
-		echo "Key generated, please add the key to your github account"
+		echo "Key generated, please add the key to your github accoun.t"
 	fi
 
   SSH_KEYS_STRING="Setup ssh keys for github [done]"   
@@ -113,7 +120,7 @@ install_basic_utilities
 
 install_menu() {
   echo -ne "
-    1) $BASIC_UTILITIES_STRING
+    1) $WM_STRING
     2) $SSH_KEYS_STRING
     3) $NVIM_STRING
     4) $ZSH_STRING
@@ -126,7 +133,7 @@ install_menu() {
     read -r option
     case $option in
     1)
-        install_basic_utilities
+        configure_wm
         install_menu
         ;;
     2)
