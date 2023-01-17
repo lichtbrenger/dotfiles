@@ -23,7 +23,7 @@ FILE=~/.ssh/id_ed25519.pub
 install_basic_utilities() {
   sudo dnf upgrade
   echo '------------------ essential libraries ------------------------------'
-  sudo dnf install -y git curl ripgrep pip npm unzip g++
+  sudo dnf install -y git curl ripgrep pip npm unzip g++ dnf make automake gcc gcc-c++ kernel-devel pam-devel libxcb-devel
 
   BASIC_UTILITIES_STRING="Install basic utilities [done]"
 }
@@ -39,6 +39,15 @@ configure_wm() {
   sudo dnf install picom
   sudo ln -sf `pwd`/desktop_environment/picom/picom.conf $home/.config/picom.conf
 
+  git clone --recurse-submodules https://github.com/fairyglade/ly
+  cd ly
+  make
+  systemctl enable ly.service
+  touch $HOME/.xinitrc
+  chmod +x $HOME/xinitrc
+  echo "#!/bin/sh" >> $HOME/.xinitrc
+  echo "exec i3" >> $HOME/.xinitrc
+  # then run startx
   echo "Please restart your system after you finish installing."
   WM_STRING="Configure windows manager [done]"
 }
