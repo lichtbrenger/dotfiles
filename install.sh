@@ -10,12 +10,11 @@ ALACRITTY_STRING="Install alacritty"
 FIREFOX_STRING="Install firefox"
 LATEX_STRING="Install latex"
 TMUX_STRING="Install tmux"
+WM_STRING="Configure windows manager"
 
 # Check if public key exists.
 FILE=~/.ssh/id_ed25519.pub
 
-# Check if basic utilities are installed.
-BASIC_UTILITIES=false
 
 # 1)
 install_basic_utilities() {
@@ -23,8 +22,18 @@ install_basic_utilities() {
   echo '------------------ essential libraries ------------------------------'
   sudo dnf install -y git curl ripgrep pip npm unzip g++
 
-  BASIC_UTILITIES=true
   BASIC_UTILITIES_STRING="Install basic utilities [done]"
+}
+
+configure_wm() {
+  sudo dnf install polybar
+  sudo ln -sf `pwd`/polybar/config.ini /etc/polybar/
+  sudo ln -sf `pwd`/polybar/launch.sh $HOME/.config/polybar/
+
+  sudo dnf install rofi
+  sudo ln -sf `pwd`/config.rasi $HOME/.config/rofi/config.rasi
+
+  WM_STRING="Configure windows manager [done]"
 }
 
 # 2)
@@ -49,7 +58,7 @@ generate_ssh_keys() {
 install_nvim() {
 	echo "---------------------- Installing nvim ---------------------------"
   sudo dnf install -y neovim python3-neovim
-  cp -r ./dotfiles/.config/nvim $HOME/.config
+  sudo ln -sf `pwd`/.config/nvim $HOME/.config/nvim
   
   NVIM_STRING="Install Neovim [done]"
 }
@@ -99,6 +108,8 @@ install_tmux() {
 
   TMUX_STRING="Install tmux [done]"
 }
+
+install_basic_utilities
 
 install_menu() {
   echo -ne "
