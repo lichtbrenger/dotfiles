@@ -32,28 +32,27 @@ install_basic_utilities() {
 }
 
 configure_wm() {
-  sudo dnf install i3-gaps
+  sudo dnf install -y i3-gaps
   sudo ln -sf `pwd`/desktop_environment/i3/config $HOME/.config/i3/
 
-  sudo dnf install polybar
+  sudo dnf install -y polybar
   sudo ln -sf `pwd`/desktop_environment/polybar/config.ini /etc/polybar/
   sudo ln -sf `pwd`/desktop_environment/polybar/launch.sh $HOME/.config/polybar/
 
-  sudo dnf install rofi
+  sudo dnf install -y rofi
   sudo ln -sf `pwd`/desktop_environment/rofi/config.rasi $HOME/.config/rofi/config.rasi
 
-  sudo dnf install picom
+  sudo dnf install -y picom
   sudo ln -sf `pwd`/desktop_environment/picom/picom.conf $home/.config/picom.conf
 
   # Setup up login via tty
   sudo systemctl disable lightdm.service --force 
-  sudo dnf remove lightdm i3lock xss-lock
   touch $HOME/.xinitrc
   chmod +x $HOME/xinitrc
   echo "#!/bin/sh" >> $HOME/.xinitrc
   echo "exec i3" >> $HOME/.xinitrc
   # automatically start up i3 is in .zshrc file
-  echo "Please restart your system after you finish installing."
+  sudo dnf remove -y lightdm i3lock xss-lock
 
   WM_STRING="Configure windows manager [done]"
 }
