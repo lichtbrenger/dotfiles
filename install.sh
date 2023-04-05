@@ -25,10 +25,16 @@ install_basic_utilities() {
   echo '------------------ essential libraries ------------------------------'
   sudo dnf install -y git curl ripgrep pip npm unzip g++ dnf make automake gcc gcc-c++ kernel-devel pam-devel libxcb-devel
 
+  echo '--- Installing ranger ----'
+  sudo dnf install -y ranger
+
   BASIC_UTILITIES_STRING="Install basic utilities [done]"
 }
 
 configure_wm() {
+  sudo dnf install i3-gaps
+  sudo ln -sf `pwd`/desktop_environment/i3/config $HOME/.config/i3/
+
   sudo dnf install polybar
   sudo ln -sf `pwd`/desktop_environment/polybar/config.ini /etc/polybar/
   sudo ln -sf `pwd`/desktop_environment/polybar/launch.sh $HOME/.config/polybar/
@@ -39,16 +45,16 @@ configure_wm() {
   sudo dnf install picom
   sudo ln -sf `pwd`/desktop_environment/picom/picom.conf $home/.config/picom.conf
 
-  git clone --recurse-submodules https://github.com/fairyglade/ly
-  cd ly
-  make
-  systemctl enable ly.service
+  # Setup up login via tty
+  sudo systemctl disable lightdm.service --force 
+  sudo dnf remove lightdm i3lock xss-lock
   touch $HOME/.xinitrc
   chmod +x $HOME/xinitrc
   echo "#!/bin/sh" >> $HOME/.xinitrc
   echo "exec i3" >> $HOME/.xinitrc
-  # then run startx
+  # automatically start up i3 is in .zshrc file
   echo "Please restart your system after you finish installing."
+
   WM_STRING="Configure windows manager [done]"
 }
 
@@ -74,8 +80,12 @@ generate_ssh_keys() {
 install_nvim() {
 	echo "---------------------- Installing nvim ---------------------------"
   sudo dnf install -y neovim python3-neovim
-  sudo ln -sf `pwd`/.config/nvim $HOME/.config/nvim
-  
+  sudo ln -sf `pwd`/nvim $HOME/.config/nvim
+
+  echo "creating coldbrewlatte nvim colorscheme"
+  sudo ln -sf `pwd`/nvim/colors/coldbrewlatte.vim /usr/share/nvim/runtime/colors/
+  # afterwards type :colorscheme coldbrewlatte
+
   NVIM_STRING="Install Neovim [done]"
 }
 
@@ -86,6 +96,8 @@ install_zsh() {
   sudo usermod -s /usr/bin/zsh $USER
   
 	sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  
+  sudo ln -sf `pwd`/zsh/.zshrc $HOME/.zshrc
 
   ZSH_STRING="Install zsh [done]"
 }

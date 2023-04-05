@@ -6,17 +6,17 @@ font pango:monospace 8
 
 # start services
 exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -n
-exec_always --no-startup-id picom --config $HOME/.config/picom/picom.conf
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -n
+exec_always --no-startup-id picom --config $HOME/.config/picom.conf
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec --no-startup-id feh --bg-fill $HOME/dotfiles/wallpapers/gruv-shougan-tower.png
+exec --no-startup-id feh --bg-fill $HOME/dotfiles/wallpapers/osakajo.png
 #exec --no-startup-id xsetroot -solid "#121212"
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym $mod+m exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
+bindsym $mod+n exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
+bindsym $mod+b exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -30,7 +30,7 @@ bindsym $mod+Shift+r restart
 
 # system shortcuts
 bindsym $mod+Shift+q kill
-bindsym $mod+BackSpace exec --no-startup-id i3lock -c 282c34
+bindsym $mod+o exec --no-startup-id pkill -KILL -u $USER
 bindsym $mod+d exec --no-startup-id rofi -show drun 
 
 # change focus
@@ -148,14 +148,10 @@ bindsym $mod+Return exec kitty
 #for_window [class="discord"] move container to workspace $ws9
 #for_window [class="Spotify"] move container to workspace $ws10
 
-# class                 border  backgr. text    indicator child_border
-client.focused          #3e3e3e #3e3e3e #FFFFFF #3e3e3e   #3e3e3e
-client.focused_inactive #333333 #5F676A #FFFFFF #484E50   #5F676A
-client.unfocused        #1F2024 #1F2024 #FFFFFF #1F2024   #1F2024
-client.urgent           #FF0000 #FF0000 #FFFFFF #FF0000   #FF0000
-client.placeholder      #444645 #444645 #FFFFFF #444645   #444645
+# no window decorations
+for_window [class=".*"] border pixel 0
 
-#client.background       #ffffff
+
 
 #Floating apps
 #for_window [class="kitty"] floating enable resize set 900 500
@@ -175,30 +171,3 @@ gaps top 0
 gaps bottom 5
 
 smart_gaps on
-
-for_window [class="kitty"] title_window_icon padding 3px
-for_window [class="code"] border pixel 0
-for_window [class="firefox"] border pixel 0
-for_window [class="discord"] border pixel 0
-for_window [class="Spotify"] border pixel 0
-
-# no window decorations
-for_window [class=".*"] border pixel 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

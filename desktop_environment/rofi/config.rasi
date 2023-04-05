@@ -9,7 +9,7 @@ configuration{
     location: 0;
     disable-history: false;
     hide-scrollbar: true;
-    display-drun: "  果 ";
+    display-drun: " 果 ";
     sidebar-mode: true;
 }
 
